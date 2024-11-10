@@ -3,7 +3,7 @@ import supabase from "../supabse";
 import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";
-import AddRoomForm from "./AddRoomForm";
+import AddEditRoomForm from "./AddEditRoomForm";
 import { useReducer } from "react";
 
 const StyledTable = styled.table`
@@ -55,12 +55,10 @@ function addEditRoom(state, action) {
         };
       // if no form is displayed
       if (!state.editRoom) {
-        console.log("working weird");
         return { ...state, editRoom: !state.editRoom, id: action.payload };
       }
       // if an edit form is displayed for the same room, we'll close it
       if (state.id === action.payload) {
-        console.log("working");
         return { ...state, editRoom: !state.editRoom, id: null };
       }
       // if an edit form is displayed for a different room, we'll change the id of the room
@@ -74,15 +72,6 @@ export default function Rooms() {
     editRoom: false,
     id: null,
   });
-
-  console.log(
-    "addRoom: ",
-    roomForm.addRoom,
-    "editRoom: ",
-    roomForm.editRoom,
-    "id: ",
-    roomForm.id
-  );
 
   const {
     data: rooms,
@@ -134,7 +123,9 @@ export default function Rooms() {
           />
         </tfoot>
       </StyledTable>
-      {(roomForm.addRoom || roomForm.editRoom) && <AddRoomForm />}
+      {(roomForm.addRoom || roomForm.editRoom) && (
+        <AddEditRoomForm id={roomForm.id} />
+      )}
     </StyledDiv>
   );
 }
