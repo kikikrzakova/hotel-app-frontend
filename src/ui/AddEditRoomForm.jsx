@@ -50,18 +50,27 @@ const StyledLegend = styled.legend`
 //   } else return data;
 // }
 
+async function fetchData(id) {
+  const { data, error } = await supabase.from("rooms").select("*").eq("id", id);
+  if (error) {
+    throw new Error("There awas an error with fetching the data");
+  } else {
+    // console.log(data);
+    return data;
+  }
+}
+
 export default function AddEditRoomForm({ id = null }) {
   const { data: rooms } = useQuery({
     queryKey: ["rooms"],
   });
-  console.log(id);
   const room = rooms.find((room) => room.id === id);
 
   return (
     <StyledForm>
       <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
-        <StyledLabel htmlFor="roomNumber">Room number</StyledLabel>
+        <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
         <StyledInput
           type="text"
           name="roomNumber"

@@ -23,16 +23,16 @@ async function deleteRoom(id) {
   if (error) throw new Error("There was an error deleting the room");
 }
 
-export default function RoomRow({
-  image,
-  price,
-  roomNumber,
-  numberOfGuests,
-  discount,
-  id,
-  dispatch,
-}) {
+export default function RoomRow({ room, dispatch }) {
   const queryClient = useQueryClient();
+  const {
+    id,
+    price,
+    roomNumber,
+    discount,
+    image,
+    guests: numberOfGuests,
+  } = room;
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteRoom,
     onSuccess: () => {
@@ -112,11 +112,6 @@ export default function RoomRow({
 }
 
 RoomRow.propTypes = {
-  image: PropTypes.string,
-  price: PropTypes.number,
-  roomNumber: PropTypes.number,
-  numberOfGuests: PropTypes.number,
-  discount: PropTypes.number,
-  id: PropTypes.number,
+  room: PropTypes.object,
   dispatch: PropTypes.func,
 };

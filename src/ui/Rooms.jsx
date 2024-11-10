@@ -90,16 +90,7 @@ export default function Rooms() {
   // create a row in the table for each room
 
   const tableRows = rooms.map((room) => (
-    <RoomRow
-      key={room.id}
-      image={room.image}
-      price={room.price}
-      discount={room.discount}
-      roomNumber={room.roomNumber}
-      numberOfGuests={room.guests}
-      id={room.id}
-      dispatch={dispatch}
-    />
+    <RoomRow room={room} dispatch={dispatch} key={room.id} />
   ));
 
   return (
