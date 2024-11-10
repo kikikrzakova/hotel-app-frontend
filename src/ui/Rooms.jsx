@@ -134,7 +134,7 @@ export default function Rooms() {
           />
         </tfoot>
       </StyledTable>
-      {roomForm.addRoom && <AddRoomForm />}
+      {(roomForm.addRoom || roomForm.editRoom) && <AddRoomForm />}
     </StyledDiv>
   );
 }
