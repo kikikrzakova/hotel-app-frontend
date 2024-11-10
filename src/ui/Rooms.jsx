@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";
 import AddRoomForm from "./AddRoomForm";
-import { useState } from "react";
+import { useReducer } from "react";
 
 const StyledTable = styled.table`
   width: 800px;
@@ -27,8 +27,62 @@ async function fetchData() {
   }
 }
 
+function addEditRoom(state, action) {
+  switch (action.type) {
+    // when we click on add new room button
+    case "add":
+      // if an edit form isn't open, we just show the addRoom form
+      if (!state.editRoom) {
+        return { ...state, addRoom: !state.addRoom };
+      }
+      // if an edit form is already displayed, we'll close it and open the add form
+
+      return {
+        ...state,
+        addRoom: !state.addRoom,
+        editRoom: !state.editRoom,
+        id: null,
+      };
+
+    case "edit":
+      // if the add room form is displayed, we'll close it, then display the edit form
+      if (state.addRoom)
+        return {
+          ...state,
+          addRoom: !state.addRoom,
+          editRoom: !state.editRoom,
+          id: action.payload,
+        };
+      // if no form is displayed
+      if (!state.editRoom) {
+        console.log("working weird");
+        return { ...state, editRoom: !state.editRoom, id: action.payload };
+      }
+      // if an edit form is displayed for the same room, we'll close it
+      if (state.id === action.payload) {
+        console.log("working");
+        return { ...state, editRoom: !state.editRoom, id: null };
+      }
+      // if an edit form is displayed for a different room, we'll change the id of the room
+      return { ...state, id: action.payload };
+  }
+}
+
 export default function Rooms() {
-  const [showForm, setShowForm] = useState(false);
+  const [roomForm, dispatch] = useReducer(addEditRoom, {
+    addRoom: false,
+    editRoom: false,
+    id: null,
+  });
+
+  console.log(
+    "addRoom: ",
+    roomForm.addRoom,
+    "editRoom: ",
+    roomForm.editRoom,
+    "id: ",
+    roomForm.id
+  );
 
   const {
     data: rooms,
@@ -45,6 +99,7 @@ export default function Rooms() {
   // console.log(rooms);
 
   // create a row in the table for each room
+
   const tableRows = rooms.map((room) => (
     <RoomRow
       key={room.id}
@@ -54,6 +109,7 @@ export default function Rooms() {
       roomNumber={room.roomNumber}
       numberOfGuests={room.guests}
       id={room.id}
+      dispatch={dispatch}
     />
   ));
 
@@ -73,12 +129,12 @@ export default function Rooms() {
         <tbody>{tableRows}</tbody>
         <tfoot>
           <AddRoom
-            fn={() => setShowForm((showForm) => !showForm)}
-            showForm={showForm}
+            fn={() => dispatch({ type: "add" })}
+            showForm={roomForm.addRoom}
           />
         </tfoot>
       </StyledTable>
-      {showForm && <AddRoomForm />}
+      {roomForm.addRoom && <AddRoomForm />}
     </StyledDiv>
   );
 }

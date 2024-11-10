@@ -30,6 +30,7 @@ export default function RoomRow({
   numberOfGuests,
   discount,
   id,
+  dispatch,
 }) {
   const queryClient = useQueryClient();
   const { isLoading: isDeleting, mutate } = useMutation({
@@ -102,7 +103,9 @@ export default function RoomRow({
         <Button onClick={() => mutate(id)} disabled={isDeleting}>
           Delete
         </Button>
-        <Button>Edit</Button>
+        <Button onClick={() => dispatch({ type: "edit", payload: id })}>
+          Edit
+        </Button>
       </td>
     </StyledRow>
   );
@@ -115,4 +118,5 @@ RoomRow.propTypes = {
   numberOfGuests: PropTypes.number,
   discount: PropTypes.number,
   id: PropTypes.number,
+  dispatch: PropTypes.func,
 };
