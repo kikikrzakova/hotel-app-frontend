@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import supabase from "../supabse";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
+import { RoomContext } from "./Rooms";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -50,32 +49,20 @@ const StyledLegend = styled.legend`
 //   } else return data;
 // }
 
-async function fetchData(id) {
-  const { data, error } = await supabase.from("rooms").select("*").eq("id", id);
-  if (error) {
-    throw new Error("There awas an error with fetching the data");
-  } else {
-    // console.log(data);
-    return data;
-  }
-}
-
-export default function AddEditRoomForm({ id = null }) {
-  const { data: rooms } = useQuery({
-    queryKey: ["rooms"],
-  });
-  const room = rooms.find((room) => room.id === id);
-
+export default function AddEditRoomForm() {
+  const room = useContext(RoomContext);
+  console.log(room);
+  useEffect(() => console.log("rerendered"), [room]);
   return (
     <StyledForm>
-      <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
+      <StyledLegend>{room.id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
         <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
         <StyledInput
           type="text"
           name="roomNumber"
           id="roomNumber"
-          defaultValue={id ? room.roomNumber : ""}
+          defaultValue={room.id ? room.roomNumber : ""}
         />
       </StyledDiv>
       <StyledDiv>
@@ -84,7 +71,7 @@ export default function AddEditRoomForm({ id = null }) {
           type="number"
           name="numberOfGuests"
           id="numberOfGuests"
-          defaultValue={id ? room.guests : ""}
+          defaultValue={room.id ? room.guests : ""}
         />
       </StyledDiv>
       <StyledDiv>
@@ -93,7 +80,7 @@ export default function AddEditRoomForm({ id = null }) {
           type="number"
           name="price"
           id="price"
-          defaultValue={id ? room.price : ""}
+          defaultValue={room.id ? room.price : ""}
         />
       </StyledDiv>
       <StyledDiv>
@@ -102,7 +89,7 @@ export default function AddEditRoomForm({ id = null }) {
           type="number"
           name="discount"
           id="discount"
-          defaultValue={id ? room.discount : ""}
+          defaultValue={room.id ? room.discount : ""}
         />
       </StyledDiv>
       <StyledDiv>
@@ -114,5 +101,5 @@ export default function AddEditRoomForm({ id = null }) {
 }
 
 AddEditRoomForm.propTypes = {
-  id: PropTypes.number,
+  room: PropTypes.object,
 };

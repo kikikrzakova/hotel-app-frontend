@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";
 import AddEditRoomForm from "./AddEditRoomForm";
-import { useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 const StyledTable = styled.table`
   width: 800px;
@@ -41,7 +41,13 @@ function addEditRoom(state, action) {
         ...state,
         addRoom: !state.addRoom,
         editRoom: !state.editRoom,
-        id: null,
+        room: {
+          id: null,
+          roomNumber: null,
+          guests: null,
+          price: null,
+          discount: null,
+        },
       };
 
     case "edit":
@@ -51,26 +57,46 @@ function addEditRoom(state, action) {
           ...state,
           addRoom: !state.addRoom,
           editRoom: !state.editRoom,
-          id: action.payload,
+          room: action.payload,
         };
       // if no form is displayed
       if (!state.editRoom) {
-        return { ...state, editRoom: !state.editRoom, id: action.payload };
+        return { ...state, editRoom: !state.editRoom, room: action.payload };
       }
       // if an edit form is displayed for the same room, we'll close it
-      if (state.id === action.payload) {
-        return { ...state, editRoom: !state.editRoom, id: null };
+      if (state.room.id === action.payload.id) {
+        console.log("working fine");
+        return {
+          ...state,
+          editRoom: !state.editRoom,
+          room: {
+            id: null,
+            roomNumber: null,
+            guests: null,
+            price: null,
+            discount: null,
+          },
+        };
       }
       // if an edit form is displayed for a different room, we'll change the id of the room
-      return { ...state, id: action.payload };
+      return { ...state, room: action.payload };
+    default:
+      return state;
   }
 }
 
+export const RoomContext = createContext();
 export default function Rooms() {
   const [roomForm, dispatch] = useReducer(addEditRoom, {
     addRoom: false,
     editRoom: false,
-    id: null,
+    room: {
+      id: null,
+      roomNumber: null,
+      guests: null,
+      price: null,
+      discount: null,
+    },
   });
 
   const {
@@ -88,7 +114,7 @@ export default function Rooms() {
   // console.log(rooms);
 
   // create a row in the table for each room
-
+  console.log(roomForm);
   const tableRows = rooms.map((room) => (
     <RoomRow room={room} dispatch={dispatch} key={room.id} />
   ));
@@ -114,9 +140,9 @@ export default function Rooms() {
           />
         </tfoot>
       </StyledTable>
-      {(roomForm.addRoom || roomForm.editRoom) && (
-        <AddEditRoomForm id={roomForm.id} />
-      )}
+      <RoomContext.Provider value={roomForm.room}>
+        {(roomForm.editRoom || roomForm.addRoom) && <AddEditRoomForm />}
+      </RoomContext.Provider>
     </StyledDiv>
   );
 }

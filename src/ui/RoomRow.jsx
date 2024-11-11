@@ -103,7 +103,7 @@ export default function RoomRow({ room, dispatch }) {
         <Button onClick={() => mutate(id)} disabled={isDeleting}>
           Delete
         </Button>
-        <Button onClick={() => dispatch({ type: "edit", payload: id })}>
+        <Button onClick={() => dispatch({ type: "edit", payload: room })}>
           Edit
         </Button>
       </td>
