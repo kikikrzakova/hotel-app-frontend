@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useContext, useEffect } from "react";
-import { RoomContext } from "./Rooms";
+import { useQuery } from "@tanstack/react-query";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -49,48 +48,27 @@ const StyledLegend = styled.legend`
 //   } else return data;
 // }
 
-export default function AddEditRoomForm() {
-  const room = useContext(RoomContext);
-  console.log(room);
-  useEffect(() => console.log("rerendered"), [room]);
+export default function AddEditRoomForm({ id = null }) {
+  console.log(id);
+
   return (
     <StyledForm>
-      <StyledLegend>{room.id ? "Edit" : "Add a new room"}</StyledLegend>
+      <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
         <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
-        <StyledInput
-          type="text"
-          name="roomNumber"
-          id="roomNumber"
-          defaultValue={room.id ? room.roomNumber : ""}
-        />
+        <StyledInput type="text" name="roomNumber" id="roomNumber" />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="numberOfGuests">Number of Guests</StyledLabel>
-        <StyledInput
-          type="number"
-          name="numberOfGuests"
-          id="numberOfGuests"
-          defaultValue={room.id ? room.guests : ""}
-        />
+        <StyledInput type="number" name="numberOfGuests" id="numberOfGuests" />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="price">Price</StyledLabel>
-        <StyledInput
-          type="number"
-          name="price"
-          id="price"
-          defaultValue={room.id ? room.price : ""}
-        />
+        <StyledInput type="number" name="price" id="price" />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="discount">Discount</StyledLabel>
-        <StyledInput
-          type="number"
-          name="discount"
-          id="discount"
-          defaultValue={room.id ? room.discount : ""}
-        />
+        <StyledInput type="number" name="discount" id="discount" />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="image">Image</StyledLabel>
@@ -101,5 +79,5 @@ export default function AddEditRoomForm() {
 }
 
 AddEditRoomForm.propTypes = {
-  room: PropTypes.object,
+  id: PropTypes.number,
 };

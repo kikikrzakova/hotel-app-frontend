@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";
 import AddEditRoomForm from "./AddEditRoomForm";
-import { createContext, useContext, useReducer } from "react";
+import { useReducer } from "react";
 
 const StyledTable = styled.table`
   width: 800px;
@@ -41,13 +41,7 @@ function addEditRoom(state, action) {
         ...state,
         addRoom: !state.addRoom,
         editRoom: !state.editRoom,
-        room: {
-          id: null,
-          roomNumber: null,
-          guests: null,
-          price: null,
-          discount: null,
-        },
+        id: null,
       };
 
     case "edit":
@@ -57,46 +51,33 @@ function addEditRoom(state, action) {
           ...state,
           addRoom: !state.addRoom,
           editRoom: !state.editRoom,
-          room: action.payload,
+          id: action.payload,
         };
       // if no form is displayed
       if (!state.editRoom) {
-        return { ...state, editRoom: !state.editRoom, room: action.payload };
+        return { ...state, editRoom: !state.editRoom, id: action.payload };
       }
       // if an edit form is displayed for the same room, we'll close it
-      if (state.room.id === action.payload.id) {
+      if (state.id === action.payload) {
         console.log("working fine");
         return {
           ...state,
           editRoom: !state.editRoom,
-          room: {
-            id: null,
-            roomNumber: null,
-            guests: null,
-            price: null,
-            discount: null,
-          },
+          id: null,
         };
       }
       // if an edit form is displayed for a different room, we'll change the id of the room
-      return { ...state, room: action.payload };
+      return { ...state, id: action.payload };
     default:
       return state;
   }
 }
 
-export const RoomContext = createContext();
 export default function Rooms() {
   const [roomForm, dispatch] = useReducer(addEditRoom, {
     addRoom: false,
     editRoom: false,
-    room: {
-      id: null,
-      roomNumber: null,
-      guests: null,
-      price: null,
-      discount: null,
-    },
+    id: null,
   });
 
   const {
@@ -140,9 +121,10 @@ export default function Rooms() {
           />
         </tfoot>
       </StyledTable>
-      <RoomContext.Provider value={roomForm.room}>
-        {(roomForm.editRoom || roomForm.addRoom) && <AddEditRoomForm />}
-      </RoomContext.Provider>
+
+      {(roomForm.addRoom || roomForm.editRoom) && (
+        <AddEditRoomForm id={roomForm?.id} />
+      )}
     </StyledDiv>
   );
 }
