@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { useEffect, useMemo } from "react";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -49,30 +51,60 @@ const StyledLegend = styled.legend`
 // }
 
 export default function AddEditRoomForm({ id = null }) {
-  console.log(id);
+  const { data: rooms, error } = useQuery({ queryKey: ["rooms"] });
+
+  const room = useMemo(() => {
+    const room = id
+      ? rooms.find((room) => room.id === id)
+      : {
+          roomNumber: "",
+          price: "",
+          discount: "",
+          guests: "",
+        };
+    return room;
+  }, [rooms, id]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: room,
+  });
+
+  useEffect(() => {
+    reset({
+      roomNumber: room.roomNumber,
+      price: room.price,
+      discount: room.discount,
+      guests: room.guests,
+    });
+  }, [room, reset]);
 
   return (
     <StyledForm>
       <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
         <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
-        <StyledInput type="text" name="roomNumber" id="roomNumber" />
+        <StyledInput type="text" id="roomNumber" {...register("roomNumber")} />
       </StyledDiv>
       <StyledDiv>
-        <StyledLabel htmlFor="numberOfGuests">Number of Guests</StyledLabel>
-        <StyledInput type="number" name="numberOfGuests" id="numberOfGuests" />
+        <StyledLabel htmlFor="guests">Number of Guests</StyledLabel>
+        <StyledInput type="number" id="guests" {...register("guests")} />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="price">Price</StyledLabel>
-        <StyledInput type="number" name="price" id="price" />
+        <StyledInput type="number" id="price" {...register("price")} />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="discount">Discount</StyledLabel>
-        <StyledInput type="number" name="discount" id="discount" />
+        <StyledInput type="number" id="discount" {...register("discount")} />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="image">Image</StyledLabel>
-        <StyledInput type="file" name="image" id="image" />
+        <StyledInput type="file" id="image" />
       </StyledDiv>
     </StyledForm>
   );

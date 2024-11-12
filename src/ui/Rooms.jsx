@@ -95,7 +95,6 @@ export default function Rooms() {
   // console.log(rooms);
 
   // create a row in the table for each room
-  console.log(roomForm);
   const tableRows = rooms.map((room) => (
     <RoomRow room={room} dispatch={dispatch} key={room.id} />
   ));
