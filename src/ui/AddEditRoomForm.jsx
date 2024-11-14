@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
+import Button from "./Button";
+import supabase, { supabaseUrl } from "../supabse";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -52,6 +54,7 @@ const StyledLegend = styled.legend`
 
 export default function AddEditRoomForm({ id = null }) {
   const { data: rooms, error } = useQuery({ queryKey: ["rooms"] });
+  const queryClient = useQueryClient();
 
   const room = useMemo(() => {
     const room = id
@@ -61,10 +64,11 @@ export default function AddEditRoomForm({ id = null }) {
           price: "",
           discount: "",
           guests: "",
+          image: "",
         };
     return room;
   }, [rooms, id]);
-
+  console.log(room);
   const {
     register,
     handleSubmit,
@@ -74,17 +78,60 @@ export default function AddEditRoomForm({ id = null }) {
     defaultValues: room,
   });
 
+  async function updateData(room) {
+    const randomNumber = Math.trunc(Math.random() * 1000000000);
+    const bucketName = "hotel";
+    const filePath = `hotel${randomNumber}`;
+    const pictureURL = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`;
+    // upload picture to the supabase bucket
+    // the file input returns a FileList, to get the file, we need to access the file by index
+    if (room.image.length > 0) {
+      // add a random number to make sure the name isn't duplicate
+
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .upload(`${filePath}`, room.image[0], {
+          upsert: false, // if we try to upload a file with the same name, it will return an error
+        });
+      if (error) {
+        console.error("Error uploading image:", error.message);
+      } else {
+        console.log("Image uploaded successfully:", data);
+      }
+    }
+
+    const { error } = await supabase
+      .from("rooms")
+      .update({
+        roomNumber: room.roomNumber,
+        guests: room.guests,
+        price: room.price,
+        discount: room.discount,
+        ...(room.image.length > 0 && { image: pictureURL }),
+      })
+      .eq("id", id)
+      .select();
+    if (error) console.log(error.message);
+
+    // after updating the data in the database, we need to invalidate the cache to refetch the updated data
+    queryClient.invalidateQueries({
+      queryKey: ["rooms"],
+    });
+  }
+
   useEffect(() => {
     reset({
       roomNumber: room.roomNumber,
       price: room.price,
       discount: room.discount,
       guests: room.guests,
+      image: "",
     });
   }, [room, reset]);
+  // STILL IN PROGRESS
 
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit(updateData)}>
       <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
         <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
@@ -104,8 +151,9 @@ export default function AddEditRoomForm({ id = null }) {
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="image">Image</StyledLabel>
-        <StyledInput type="file" id="image" />
+        <StyledInput type="file" id="image" {...register("image")} />
       </StyledDiv>
+      <Button type="submit">{id ? "Update" : "Add"}</Button>
     </StyledForm>
   );
 }

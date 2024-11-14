@@ -17,9 +17,14 @@ const StyledButton = styled.button`
     background-color: #f3c49a;
   }
 `;
-export default function Button({ children, onClick, disabled }) {
+export default function Button({
+  children,
+  onClick,
+  disabled,
+  type = "button",
+}) {
   return (
-    <StyledButton onClick={onClick} disabled={disabled}>
+    <StyledButton onClick={onClick} disabled={disabled} type={type}>
       {children}
     </StyledButton>
   );
@@ -29,4 +34,5 @@ Button.propTypes = {
   children: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  type: PropTypes.string,
 };
