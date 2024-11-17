@@ -59,7 +59,6 @@ function addEditRoom(state, action) {
       }
       // if an edit form is displayed for the same room, we'll close it
       if (state.id === action.payload) {
-        console.log("working fine");
         return {
           ...state,
           editRoom: !state.editRoom,

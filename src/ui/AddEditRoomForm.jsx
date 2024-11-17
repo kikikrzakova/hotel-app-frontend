@@ -54,6 +54,7 @@ const StyledLegend = styled.legend`
 
 export default function AddEditRoomForm({ id = null }) {
   const { data: rooms, error } = useQuery({ queryKey: ["rooms"] });
+  if (error) console.log(error);
   const queryClient = useQueryClient();
 
   const room = useMemo(() => {
@@ -68,13 +69,8 @@ export default function AddEditRoomForm({ id = null }) {
         };
     return room;
   }, [rooms, id]);
-  console.log(room);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
+
+  const { register, handleSubmit, reset } = useForm({
     defaultValues: room,
   });
 
