@@ -95,19 +95,36 @@ export default function AddEditRoomForm({ id = null }) {
         console.log("Image uploaded successfully:", data);
       }
     }
-
-    const { error } = await supabase
-      .from("rooms")
-      .update({
-        roomNumber: room.roomNumber,
-        guests: room.guests,
-        price: room.price,
-        discount: room.discount,
-        ...(room.image.length > 0 && { image: pictureURL }),
-      })
-      .eq("id", id)
-      .select();
-    if (error) console.log(error.message);
+    if (id) {
+      const { error } = await supabase
+        .from("rooms")
+        .update({
+          roomNumber: room.roomNumber,
+          guests: room.guests,
+          price: room.price,
+          discount: room.discount,
+          ...(room.image.length > 0 && { image: pictureURL }),
+        })
+        .eq("id", id)
+        .select();
+      if (error) console.log(error.message);
+    } else {
+      console.log(room);
+      const { error } = await supabase
+        .from("rooms")
+        .insert([
+          {
+            roomNumber: +room.roomNumber,
+            guests: +room.guests,
+            price: +room.price,
+            discount: +room.discount,
+            ...(room.image.length > 0 && { image: pictureURL }),
+          },
+        ])
+        .select();
+      if (error) console.log(error);
+      // error code 23505 - duplicate room number - all room numbers have to be unique
+    }
 
     // after updating the data in the database, we need to invalidate the cache to refetch the updated data
     queryClient.invalidateQueries({
