@@ -120,13 +120,16 @@ export default function AddEditRoomForm({ id = null }) {
   }
 
   useEffect(() => {
-    reset({
-      roomNumber: room.roomNumber,
-      price: room.price,
-      discount: room.discount,
-      guests: room.guests,
-      image: "",
-    });
+    // if the edit form is open and we delete the room, there would be an error, because room would be undefined => the if clause is necessary
+    if (room) {
+      reset({
+        roomNumber: room.roomNumber,
+        price: room.price,
+        discount: room.discount,
+        guests: room.guests,
+        image: "",
+      });
+    }
   }, [room, reset]);
   // STILL IN PROGRESS
 
