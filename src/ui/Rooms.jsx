@@ -4,7 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";
 import AddEditRoomForm from "./AddEditRoomForm";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
+import RoomFilter from "./RoomFilter";
 
 const StyledTable = styled.table`
   width: 800px;
@@ -17,8 +18,10 @@ const StyledDiv = styled.div`
 `;
 
 // fetch data about rooms from supabase
+
 async function fetchData() {
   const { data, error } = await supabase.from("rooms").select("*");
+
   if (error) {
     throw new Error("There awas an error with fetching the data");
   } else {
@@ -73,6 +76,8 @@ function addEditRoom(state, action) {
 }
 
 export default function Rooms() {
+  const [sortedBy, setSortedBy] = useState("roomNumber");
+  const [ascending, setAscending] = useState("true");
   const [roomForm, dispatch] = useReducer(addEditRoom, {
     addRoom: false,
     editRoom: false,
@@ -93,13 +98,29 @@ export default function Rooms() {
   if (error) return <div>Error: {error.message}</div>;
   // console.log(rooms);
 
+  const sortedRooms = rooms.sort((roomA, roomB) => {
+    if (sortedBy === "price") {
+      const priceDiff =
+        roomA.price - roomA.discount - (roomB.price - roomB.discount);
+      return ascending === "true" ? priceDiff : -priceDiff;
+    } else {
+      const roomNumberDiff = roomA.roomNumber - roomB.roomNumber;
+      return ascending === "true" ? roomNumberDiff : -roomNumberDiff;
+    }
+  });
   // create a row in the table for each room
-  const tableRows = rooms.map((room) => (
+  const tableRows = sortedRooms.map((room) => (
     <RoomRow room={room} dispatch={dispatch} key={room.id} />
   ));
 
   return (
     <StyledDiv>
+      <RoomFilter
+        sortedBy={sortedBy}
+        ascending={ascending}
+        setSortedBy={setSortedBy}
+        setAscending={setAscending}
+      />
       <StyledTable>
         <thead>
           <StyledRow>

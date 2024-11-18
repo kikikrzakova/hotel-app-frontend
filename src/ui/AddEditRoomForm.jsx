@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
 import Button from "./Button";
 import supabase, { supabaseUrl } from "../supabse";
+import RoomFilter from "./RoomFilter";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -95,6 +96,8 @@ export default function AddEditRoomForm({ id = null }) {
         console.log("Image uploaded successfully:", data);
       }
     }
+
+    // if there's an id, we're in editting mode, otherwise we're creating a new room row
     if (id) {
       const { error } = await supabase
         .from("rooms")
