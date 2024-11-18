@@ -7,6 +7,7 @@ import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import Button from "./Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabse";
+import showToast from "../toast";
 
 export const StyledRow = styled.tr`
   height: 2em;
@@ -39,10 +40,12 @@ export default function RoomRow({ room, dispatch }) {
       queryClient.invalidateQueries({
         queryKey: ["rooms"],
       });
-      console.log("Room deleted");
+
+      // shows a toast
+      showToast("success", "Successfully deleted");
     },
-    onErro: (error) => {
-      console.log(error.message);
+    onError: (error) => {
+      showToast("error", `${error.message}`);
     },
   });
 
@@ -103,7 +106,6 @@ export default function RoomRow({ room, dispatch }) {
         <Button
           onClick={() => {
             mutate(id);
-            console.log(id);
           }}
           disabled={isDeleting}
         >

@@ -6,6 +6,7 @@ import { useEffect, useMemo } from "react";
 import Button from "./Button";
 import supabase, { supabaseUrl } from "../supabse";
 import RoomFilter from "./RoomFilter";
+import showToast from "../toast";
 
 const StyledInput = styled.input`
   border: 1px solid #954608;
@@ -110,9 +111,12 @@ export default function AddEditRoomForm({ id = null }) {
         })
         .eq("id", id)
         .select();
-      if (error) console.log(error.message);
+      if (error) {
+        showToast("error", error.message);
+      } else {
+        showToast("success", "Room successfully updated");
+      }
     } else {
-      console.log(room);
       const { error } = await supabase
         .from("rooms")
         .insert([
@@ -125,7 +129,9 @@ export default function AddEditRoomForm({ id = null }) {
           },
         ])
         .select();
-      if (error) console.log(error);
+      if (error) {
+        showToast("error", error.message);
+      } else showToast("success", "Room successfully added");
       // error code 23505 - duplicate room number - all room numbers have to be unique
     }
 
