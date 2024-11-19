@@ -12,6 +12,14 @@ const StyledButton = styled.button`
   }
 `;
 
+const StyledContainer = styled.div`
+  display: flex;
+  width: 800px;
+  margin: 10px 5px;
+  flex-direction: column;
+  align-items: end;
+`;
+
 export default function RoomFilter({
   sortedBy,
   setSortedBy,
@@ -25,7 +33,7 @@ export default function RoomFilter({
     setAscending(e.target.value);
   }
   return (
-    <div>
+    <StyledContainer>
       <div>
         Sort by:
         <StyledButton
@@ -62,7 +70,7 @@ export default function RoomFilter({
           descending
         </StyledButton>
       </div>
-    </div>
+    </StyledContainer>
   );
 }
 
