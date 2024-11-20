@@ -8,6 +8,7 @@ import Button from "./Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabse";
 import showToast from "../toast";
+import stylePrice from "../stylePrice";
 
 export const StyledRow = styled.tr`
   height: 2em;
@@ -49,15 +50,8 @@ export default function RoomRow({ room, dispatch }) {
     },
   });
 
-  const styledPrice = new Intl.NumberFormat("en", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-
-  const styledDiscountedPrice = new Intl.NumberFormat("en", {
-    style: "currency",
-    currency: "USD",
-  }).format(price - discount);
+  const styledPrice = stylePrice(price);
+  const styledDiscountedPrice = stylePrice(price - discount);
 
   return (
     <StyledRow>

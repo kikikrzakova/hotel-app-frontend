@@ -7,11 +7,11 @@ import AddEditRoomForm from "./AddEditRoomForm";
 import { useReducer, useState } from "react";
 import RoomFilter from "./RoomFilter";
 
-const StyledTable = styled.table`
+export const StyledTable = styled.table`
   width: 800px;
   border-collapse: collapse;
 `;
-const StyledDiv = styled.div`
+export const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,8 +95,7 @@ export default function Rooms() {
 
   if (isLoading) return <p>Loading...</p>;
   //TODO add a loading spinner instead of "Loading..."
-  if (error) return <div>Error: {error.message}</div>;
-  // console.log(rooms);
+  if (error) return <div>{error.message}</div>;
 
   const sortedRooms = rooms.sort((roomA, roomB) => {
     if (sortedBy === "price") {

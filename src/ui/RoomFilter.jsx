@@ -41,7 +41,7 @@ export default function RoomFilter({
           className={sortedBy === "roomNumber" ? "active" : ""}
           value="roomNumber"
         >
-          room number
+          Room Number
         </StyledButton>{" "}
         |
         <StyledButton
@@ -49,7 +49,7 @@ export default function RoomFilter({
           className={sortedBy === "price" ? "active" : ""}
           value="price"
         >
-          price
+          Price
         </StyledButton>
       </div>
       <div>
@@ -59,7 +59,7 @@ export default function RoomFilter({
           className={ascending === "true" ? "active" : ""}
           value="true"
         >
-          ascending
+          Ascending
         </StyledButton>{" "}
         |
         <StyledButton
@@ -67,7 +67,7 @@ export default function RoomFilter({
           className={ascending === "false" ? "active" : ""}
           value="false"
         >
-          descending
+          Descending
         </StyledButton>
       </div>
     </StyledContainer>
