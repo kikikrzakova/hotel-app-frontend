@@ -42,6 +42,7 @@ export default function Bookings() {
   return (
     <>
       <StyledDiv>
+        <BookingFilter />
         <StyledTable>
           <thead>
             <StyledRow>

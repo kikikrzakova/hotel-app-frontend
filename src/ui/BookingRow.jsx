@@ -65,7 +65,7 @@ export default function BookingRow({ booking, dispatch }) {
           }}
           disabled={isDeleting}
         >
-          Delete
+          Check-out
         </Button>
         <Button onClick={() => dispatch({ type: "edit", payload: id })}>
           Edit
