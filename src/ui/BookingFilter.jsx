@@ -42,10 +42,15 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
               .includes(filters.firstName.toLowerCase()) &&
             booking.lastName
               .toLowerCase()
-              .includes(filters.lastName.toLowerCase())
+              .includes(filters.lastName.toLowerCase()) &&
+            (filters.checkedIn === "both"
+              ? true
+              : filters.checkedIn === "yes"
+              ? booking.checkedIn === true
+              : booking.checkedIn === false)
         )
       ),
-    [filters, setFilteredBookings]
+    [filters, setFilteredBookings, bookings]
   );
 
   return (
