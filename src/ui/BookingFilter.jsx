@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -155,3 +156,8 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
 }
 
 BookingFilter.propTypes = {};
+
+BookingFilter.propTypes = {
+  bookings: PropTypes.array,
+  setFilteredBookings: PropTypes.func,
+};
