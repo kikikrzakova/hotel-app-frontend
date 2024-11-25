@@ -26,12 +26,21 @@ const initialState = {
   to: "",
   paid: "both",
 };
-export default function BookingFilter({ setFilteredBookings }) {
+export default function BookingFilter({ setFilteredBookings, bookings }) {
   const [filters, setFilters] = useState(initialState);
   function filter(key, value) {
     setFilters((filters) => ({ ...filters, [key]: value }));
   }
   console.log(filters);
+  useEffect(
+    () =>
+      setFilteredBookings(
+        bookings.filter((booking) =>
+          booking.name.toLowerCase().includes(filters.firstName.toLowerCase())
+        )
+      ),
+    [filters, setFilteredBookings]
+  );
 
   return (
     <StyledContainer>

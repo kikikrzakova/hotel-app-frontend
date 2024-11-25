@@ -11,6 +11,11 @@ const StyledTable = styled.table`
 `;
 export default function BookingsTable({ bookings }) {
   const [filteredBookings, setFilteredBookings] = useState(bookings);
+  console.log("bookings: ", bookings);
+  const test = bookings.filter((booking) =>
+    booking.name.toLowerCase().includes("tom".toLowerCase())
+  );
+  console.log(test);
   const bookingRows = filteredBookings.map((booking) => (
     <BookingRow booking={booking} key={booking.id} />
   ));
@@ -18,7 +23,10 @@ export default function BookingsTable({ bookings }) {
   return (
     <>
       <StyledDiv>
-        <BookingFilter bookings={setFilteredBookings} />
+        <BookingFilter
+          setFilteredBookings={setFilteredBookings}
+          bookings={bookings}
+        />
         <StyledTable>
           <thead>
             <StyledRow>
