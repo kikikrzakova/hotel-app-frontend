@@ -52,7 +52,9 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
               ? true
               : filters.paid === "yes"
               ? booking.paid === true
-              : booking.paid === false)
+              : booking.paid === false) &&
+            (filters.from ? booking.fromDate === filters.from : true) &&
+            (filters.to ? booking.toDate === filters.to : true)
         )
       ),
     [filters, setFilteredBookings, bookings]
