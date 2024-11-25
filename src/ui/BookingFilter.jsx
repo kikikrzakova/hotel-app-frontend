@@ -35,8 +35,14 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
   useEffect(
     () =>
       setFilteredBookings(
-        bookings.filter((booking) =>
-          booking.name.toLowerCase().includes(filters.firstName.toLowerCase())
+        bookings.filter(
+          (booking) =>
+            booking.name
+              .toLowerCase()
+              .includes(filters.firstName.toLowerCase()) &&
+            booking.lastName
+              .toLowerCase()
+              .includes(filters.lastName.toLowerCase())
         )
       ),
     [filters, setFilteredBookings]
