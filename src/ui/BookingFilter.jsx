@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -26,12 +26,13 @@ const initialState = {
   to: "",
   paid: "both",
 };
-export default function BookingFilter() {
+export default function BookingFilter({ setFilteredBookings }) {
   const [filters, setFilters] = useState(initialState);
   function filter(key, value) {
     setFilters((filters) => ({ ...filters, [key]: value }));
   }
   console.log(filters);
+
   return (
     <StyledContainer>
       <form>
@@ -79,9 +80,17 @@ export default function BookingFilter() {
         </div>
         <div>
           <label>From</label>
-          <StyledInput type="date" />
+          <StyledInput
+            type="date"
+            value={filters.from}
+            onChange={(e) => filter("from", e.target.value)}
+          />
           <label>To</label>
-          <StyledInput type="date" />
+          <StyledInput
+            type="date"
+            value={filters.to}
+            onChange={(e) => filter("to", e.target.value)}
+          />
         </div>
         <div>
           <span>Paid</span>
