@@ -47,7 +47,12 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
               ? true
               : filters.checkedIn === "yes"
               ? booking.checkedIn === true
-              : booking.checkedIn === false)
+              : booking.checkedIn === false) &&
+            (filters.paid === "both"
+              ? true
+              : filters.paid === "yes"
+              ? booking.paid === true
+              : booking.paid === false)
         )
       ),
     [filters, setFilteredBookings, bookings]
