@@ -4,6 +4,7 @@ import BookingFilter from "./BookingFilter";
 import { StyledDiv } from "./Rooms";
 import { StyledRow } from "./RoomRow";
 import { useState } from "react";
+import BookARoom from "./BookARoom";
 
 const StyledTable = styled.table`
   width: 1200px;
@@ -27,6 +28,7 @@ export default function BookingsTable({ bookings }) {
           setFilteredBookings={setFilteredBookings}
           bookings={bookings}
         />
+        {/* <BookARoom /> */}
         <StyledTable>
           <thead>
             <StyledRow>
