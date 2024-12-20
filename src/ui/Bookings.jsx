@@ -1,16 +1,17 @@
-import supabase from "../supabse";
+// import supabase from "../supabse";
 import { useQuery } from "@tanstack/react-query";
 
 import BookingsTable from "./BookingsTable";
 
 async function fetchData() {
-  const { data, error } = await supabase.from("bookings").select("*");
+  const rawData = await fetch("http://localhost:3000/bookings", {
+    method: "GET",
+  });
+  const {
+    data: { bookings },
+  } = await rawData.json();
 
-  if (error) {
-    console.log("There was an error fetching data");
-  } else {
-    return data;
-  }
+  return bookings;
 }
 export default function Bookings() {
   const {

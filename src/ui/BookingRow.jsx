@@ -20,15 +20,19 @@ async function deleteBooking(id) {
 export default function BookingRow({ booking, dispatch }) {
   const queryClient = useQueryClient();
   const {
-    id,
-    name,
+    _id: id,
+    firstName,
     lastName,
     checkedIn,
     paid,
-    fromDate,
-    toDate,
-    roomNumber,
+    checkIn,
+    checkOut,
+    room,
     total,
+    guests,
+    checkedOut,
+    passport,
+    birthday,
   } = booking;
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteBooking,
@@ -50,11 +54,15 @@ export default function BookingRow({ booking, dispatch }) {
   return (
     <StyledRow>
       <td>{lastName}</td>
-      <td>{name}</td>
-      <td>{roomNumber}</td>
+      <td>{firstName}</td>
+      <td>{passport}</td>
+      <td>{birthday}</td>
+      <td>{guests}</td>
+      <td>{room}</td>
       <td>{checkedIn ? "checked-in" : "-"}</td>
-      <td>{fromDate}</td>
-      <td>{toDate}</td>
+      <td>{checkIn}</td>
+      <td>{checkOut}</td>
+      <td>{checkedOut}</td>
       <td>{styledTotal}</td>
       <td>{paid ? "PAID" : "-"}</td>
 
