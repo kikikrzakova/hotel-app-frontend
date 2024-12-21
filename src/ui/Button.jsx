@@ -15,6 +15,11 @@ const StyledButton = styled.button`
   &:active,
   &:hover {
     background-color: #f3c49a;
+    cursor: pointer;
+  }
+  ,
+  &:disabled {
+    visibility: hidden;
   }
 `;
 export default function Button({

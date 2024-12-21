@@ -12,6 +12,19 @@ const StyledRow = styled.tr`
   text-align: center;
 `;
 
+async function payBooking(id) {
+  try {
+    await fetch(`http://localhost:3000/bookings/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json", // Specify the content type
+      },
+      body: JSON.stringify({ paid: true }),
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 async function deleteBooking(id) {
   const { error } = await supabase.from("bookings").delete().eq("id", id);
   if (error) throw new Error("There was an error deleting the booking");
@@ -48,6 +61,20 @@ export default function BookingRow({ booking, dispatch }) {
       showToast("error", `${error.message}`);
     },
   });
+  const { isLoading: isPaying, mutate: pay } = useMutation({
+    mutationFn: payBooking,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+
+      // shows a toast
+      showToast("success", "Successfully paid");
+    },
+    onError: (error) => {
+      showToast("error", `${error.message}`);
+    },
+  });
 
   const styledTotal = stylePrice(total);
 
@@ -59,22 +86,40 @@ export default function BookingRow({ booking, dispatch }) {
       <td>{birthday}</td>
       <td>{guests}</td>
       <td>{room}</td>
-      <td>{checkedIn ? "checked-in" : "-"}</td>
+      <td>{checkedIn ? "checked-in" : <Button>Check-in</Button>}</td>
       <td>{checkIn}</td>
       <td>{checkOut}</td>
-      <td>{checkedOut}</td>
+      <td>
+        {checkedOut ? (
+          "checked-out"
+        ) : (
+          <Button
+            onClick={() => {
+              mutate(id);
+            }}
+            disabled={isDeleting}
+          >
+            Check-out
+          </Button>
+        )}
+      </td>
       <td>{styledTotal}</td>
-      <td>{paid ? "PAID" : "-"}</td>
+      <td>
+        {paid ? (
+          "PAID"
+        ) : (
+          <Button
+            onClick={() => {
+              pay(id);
+            }}
+            disabled={isPaying || paid}
+          >
+            Pay
+          </Button>
+        )}
+      </td>
 
       <td>
-        <Button
-          onClick={() => {
-            mutate(id);
-          }}
-          disabled={isDeleting}
-        >
-          Check-out
-        </Button>
         <Button onClick={() => dispatch({ type: "edit", payload: id })}>
           Edit
         </Button>
