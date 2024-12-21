@@ -125,7 +125,8 @@ export default function BookingRow({ booking, dispatch }) {
       <td>{checkIn}</td>
       <td>{checkOut}</td>
       <td>
-        {checkedOut ? (
+        {/* Only checked-in guests who have paid the bill can check-out*/}
+        {!checkedIn ? null : !paid ? null : checkedOut ? (
           "checked-out"
         ) : (
           <Button
