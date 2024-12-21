@@ -14,6 +14,7 @@ import NotFound from "./ui/NotFound";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import BookARoom from "./ui/BookARoom";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="home" element={<Home />} />
+              <Route path="booking" element={<BookARoom />} />
               <Route path="bookings" element={<Bookings />} />
               <Route path="rooms" element={<Rooms />} />
               <Route path="settings" element={<Settings />} />

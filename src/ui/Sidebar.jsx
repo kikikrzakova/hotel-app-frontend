@@ -5,6 +5,7 @@ import { MdBedroomParent } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { IconContext } from "react-icons";
+import { FaTableList } from "react-icons/fa6";
 
 const Aside = styled.aside`
   height: 100vh;
@@ -43,9 +44,13 @@ export default function Sidebar() {
           <IoHome />
           <span>Home</span>
         </StyledNavLink>
+        <StyledNavLink to="/booking">
+          <FaCalendarAlt />
+          <span>Book a Room</span>
+        </StyledNavLink>
 
         <StyledNavLink to="/bookings">
-          <FaCalendarAlt />
+          <FaTableList />
           <span>Bookings</span>
         </StyledNavLink>
 
