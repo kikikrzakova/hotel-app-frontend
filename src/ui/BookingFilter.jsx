@@ -29,13 +29,13 @@ const initialState = {
 };
 export default function BookingFilter({ setFilteredBookings, bookings }) {
   const [filters, setFilters] = useState(initialState);
-  console.log(bookings);
+
   // const [searchParams, setSearchParams] = useSearchParams();
   function filter(key, value) {
     setFilters((filters) => ({ ...filters, [key]: value }));
     // setSearchParams(key, value);
   }
-  console.log(filters);
+
   useEffect(
     () =>
       setFilteredBookings(

@@ -5,6 +5,11 @@ import supabase from "../supabse";
 import showToast from "../toast";
 import Button from "./Button";
 import stylePrice from "../stylePrice";
+import {
+  payFunction,
+  checkInFunction,
+  checkOutFunction,
+} from "../buttonFunctions";
 
 const StyledRow = styled.tr`
   height: 2em;
@@ -12,19 +17,6 @@ const StyledRow = styled.tr`
   text-align: center;
 `;
 
-async function payBooking(id) {
-  try {
-    await fetch(`http://localhost:3000/bookings/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json", // Specify the content type
-      },
-      body: JSON.stringify({ paid: true }),
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-}
 async function deleteBooking(id) {
   const { error } = await supabase.from("bookings").delete().eq("id", id);
   if (error) throw new Error("There was an error deleting the booking");
@@ -61,8 +53,8 @@ export default function BookingRow({ booking, dispatch }) {
       showToast("error", `${error.message}`);
     },
   });
-  const { isLoading: isPaying, mutate: pay } = useMutation({
-    mutationFn: payBooking,
+  const { isLoading: isPaying, mutate: mutatePay } = useMutation({
+    mutationFn: payFunction,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["bookings"],
@@ -70,6 +62,36 @@ export default function BookingRow({ booking, dispatch }) {
 
       // shows a toast
       showToast("success", "Successfully paid");
+    },
+    onError: (error) => {
+      showToast("error", `${error.message}`);
+    },
+  });
+
+  const { isLoading: checkingOut, mutate: mutateCheckOut } = useMutation({
+    mutationFn: checkOutFunction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+
+      // shows a toast
+      showToast("success", "Successfully checked-out");
+    },
+    onError: (error) => {
+      showToast("error", `${error.message}`);
+    },
+  });
+
+  const { isLoading: checkingIn, mutate: mutateCheckIn } = useMutation({
+    mutationFn: checkInFunction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+
+      // shows a toast
+      showToast("success", "Successfully checked-in");
     },
     onError: (error) => {
       showToast("error", `${error.message}`);
@@ -86,7 +108,20 @@ export default function BookingRow({ booking, dispatch }) {
       <td>{birthday}</td>
       <td>{guests}</td>
       <td>{room}</td>
-      <td>{checkedIn ? "checked-in" : <Button>Check-in</Button>}</td>
+      <td>
+        {checkedIn ? (
+          "checked-in"
+        ) : (
+          <Button
+            onClick={() => {
+              mutateCheckIn(id);
+            }}
+            disabled={checkingIn || checkedIn}
+          >
+            Check-in
+          </Button>
+        )}
+      </td>
       <td>{checkIn}</td>
       <td>{checkOut}</td>
       <td>
@@ -95,9 +130,9 @@ export default function BookingRow({ booking, dispatch }) {
         ) : (
           <Button
             onClick={() => {
-              mutate(id);
+              mutateCheckOut(id);
             }}
-            disabled={isDeleting}
+            disabled={checkingOut || checkedOut}
           >
             Check-out
           </Button>
@@ -110,7 +145,7 @@ export default function BookingRow({ booking, dispatch }) {
         ) : (
           <Button
             onClick={() => {
-              pay(id);
+              mutatePay(id);
             }}
             disabled={isPaying || paid}
           >
