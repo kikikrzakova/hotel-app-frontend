@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import supabase from "../supabse";
 import showToast from "../toast";
 import Button from "./Button";
 import stylePrice from "../stylePrice";
@@ -16,11 +15,6 @@ const StyledRow = styled.tr`
   border: 1px solid #954608;
   text-align: center;
 `;
-
-async function deleteBooking(id) {
-  const { error } = await supabase.from("bookings").delete().eq("id", id);
-  if (error) throw new Error("There was an error deleting the booking");
-}
 
 export default function BookingRow({ booking, dispatch }) {
   const queryClient = useQueryClient();
@@ -39,20 +33,7 @@ export default function BookingRow({ booking, dispatch }) {
     passport,
     birthday,
   } = booking;
-  const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: deleteBooking,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["bookings"],
-      });
 
-      // shows a toast
-      showToast("success", "Successfully deleted");
-    },
-    onError: (error) => {
-      showToast("error", `${error.message}`);
-    },
-  });
   const { isLoading: isPaying, mutate: mutatePay } = useMutation({
     mutationFn: payFunction,
     onSuccess: () => {

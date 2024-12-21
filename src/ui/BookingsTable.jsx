@@ -5,6 +5,7 @@ import { StyledDiv } from "./Rooms";
 import { StyledRow } from "./RoomRow";
 import { useState } from "react";
 import BookARoom from "./BookARoom";
+import PropTypes from "prop-types";
 
 const StyledTable = styled.table`
   width: 1200px;
@@ -52,3 +53,7 @@ export default function BookingsTable({ bookings }) {
     </>
   );
 }
+
+BookingsTable.propTypes = {
+  bookings: PropTypes.array,
+};
