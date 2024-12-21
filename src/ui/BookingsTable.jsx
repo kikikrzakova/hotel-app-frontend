@@ -23,10 +23,10 @@ export default function BookingsTable({ bookings }) {
   return (
     <>
       <StyledDiv>
-        {/* <BookingFilter
+        <BookingFilter
           setFilteredBookings={setFilteredBookings}
           bookings={bookings}
-        /> */}
+        />
         {/* <BookARoom /> */}
         <StyledTable>
           <thead>

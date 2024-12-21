@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useSearchParams } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -22,15 +23,17 @@ const StyledInput = styled.input`
 const initialState = {
   firstName: "",
   lastName: "",
+  passport: "",
   checkedIn: "both",
-  from: "",
-  to: "",
   paid: "both",
 };
 export default function BookingFilter({ setFilteredBookings, bookings }) {
   const [filters, setFilters] = useState(initialState);
+  console.log(bookings);
+  // const [searchParams, setSearchParams] = useSearchParams();
   function filter(key, value) {
     setFilters((filters) => ({ ...filters, [key]: value }));
+    // setSearchParams(key, value);
   }
   console.log(filters);
   useEffect(
@@ -38,12 +41,15 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
       setFilteredBookings(
         bookings.filter(
           (booking) =>
-            booking.name
+            booking.firstName
               .toLowerCase()
               .includes(filters.firstName.toLowerCase()) &&
             booking.lastName
               .toLowerCase()
               .includes(filters.lastName.toLowerCase()) &&
+            booking.passport
+              .toLowerCase()
+              .includes(filters.passport.toLowerCase()) &&
             (filters.checkedIn === "both"
               ? true
               : filters.checkedIn === "yes"
@@ -53,9 +59,7 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
               ? true
               : filters.paid === "yes"
               ? booking.paid === true
-              : booking.paid === false) &&
-            (filters.from ? booking.fromDate === filters.from : true) &&
-            (filters.to ? booking.toDate === filters.to : true)
+              : booking.paid === false)
         )
       ),
     [filters, setFilteredBookings, bookings]
@@ -76,6 +80,14 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
           value={filters.lastName}
           onChange={(e) => filter("lastName", e.target.value)}
         />
+        <div>
+          <label htmlFor="passport">Passport</label>
+          <StyledInput
+            id="passport"
+            value={filters.passport}
+            onChange={(e) => filter("passport", e.target.value)}
+          />
+        </div>
         <div>
           <span>Checked-in</span>
           <input
@@ -106,20 +118,7 @@ export default function BookingFilter({ setFilteredBookings, bookings }) {
           ></input>
           <label htmlFor="checked-in-no">No</label>
         </div>
-        <div>
-          <label>From</label>
-          <StyledInput
-            type="date"
-            value={filters.from}
-            onChange={(e) => filter("from", e.target.value)}
-          />
-          <label>To</label>
-          <StyledInput
-            type="date"
-            value={filters.to}
-            onChange={(e) => filter("to", e.target.value)}
-          />
-        </div>
+
         <div>
           <span>Paid</span>
           <input
