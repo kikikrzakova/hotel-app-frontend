@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useSearchParams } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: flex;
