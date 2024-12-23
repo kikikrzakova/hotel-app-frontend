@@ -86,7 +86,7 @@ export default function BookingRow({ booking, dispatch }) {
       <td>{lastName}</td>
       <td>{firstName}</td>
       <td>{passport}</td>
-      <td>{birthday}</td>
+      <td>{birthday.split("T")[0]}</td>
       <td>{guests}</td>
       <td>{room}</td>
       <td>
@@ -103,8 +103,8 @@ export default function BookingRow({ booking, dispatch }) {
           </Button>
         )}
       </td>
-      <td>{checkIn}</td>
-      <td>{checkOut}</td>
+      <td>{checkIn.split("T")[0]}</td>
+      <td>{checkOut.split("T")[0]}</td>
       <td>
         {/* Only checked-in guests who have paid the bill can check-out*/}
         {!checkedIn ? null : !paid ? null : checkedOut ? (

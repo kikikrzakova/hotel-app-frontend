@@ -43,7 +43,6 @@ export default function BookingsTable({ bookings }) {
               <th>Checked-out</th>
               <th>Total</th>
               <th>Paid</th>
-              <th></th>
             </StyledRow>
           </thead>
           <tbody>{bookingRows}</tbody>
