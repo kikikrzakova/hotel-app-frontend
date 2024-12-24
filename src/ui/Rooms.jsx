@@ -20,14 +20,11 @@ export const StyledDiv = styled.div`
 // fetch data about rooms from supabase
 
 async function fetchData() {
-  const { data, error } = await supabase.from("rooms").select("*");
-
-  if (error) {
-    throw new Error("There awas an error with fetching the data");
-  } else {
-    // console.log(data);
-    return data;
-  }
+  const response = await fetch("http://localhost:3000/rooms");
+  const {
+    data: { rooms },
+  } = await response.json();
+  return rooms;
 }
 
 function addEditRoom(state, action) {
@@ -103,13 +100,13 @@ export default function Rooms() {
         roomA.price - roomA.discount - (roomB.price - roomB.discount);
       return ascending === "true" ? priceDiff : -priceDiff;
     } else {
-      const roomNumberDiff = roomA.roomNumber - roomB.roomNumber;
+      const roomNumberDiff = roomA.number - roomB.number;
       return ascending === "true" ? roomNumberDiff : -roomNumberDiff;
     }
   });
   // create a row in the table for each room
   const tableRows = sortedRooms.map((room) => (
-    <RoomRow room={room} dispatch={dispatch} key={room.id} />
+    <RoomRow room={room} dispatch={dispatch} key={room._id} />
   ));
 
   return (

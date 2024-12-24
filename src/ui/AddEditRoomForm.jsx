@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
 import Button from "./Button";
-import supabase, { supabaseUrl } from "../supabse";
 import showToast from "../toast";
 
 const StyledInput = styled.input`
@@ -46,13 +45,6 @@ const StyledLegend = styled.legend`
   margin-bottom: 0.7em;
 `;
 
-// async function fetchRowData(id) {
-//   const { data, error } = await supabase.from("rooms").select("*").eq("id", id);
-//   if (error) {
-//     throw new Error("There was an error fetching data about the room");
-//   } else return data;
-// }
-
 export default function AddEditRoomForm({ id = null }) {
   const { data: rooms, error } = useQuery({ queryKey: ["rooms"] });
   if (error) console.log(error);
@@ -60,13 +52,13 @@ export default function AddEditRoomForm({ id = null }) {
 
   const room = useMemo(() => {
     const room = id
-      ? rooms.find((room) => room.id === id)
+      ? rooms.find((room) => room._id === id)
       : {
-          roomNumber: "",
-          price: "",
-          discount: "",
-          guests: "",
-          image: "",
+          number: null,
+          price: null,
+          discount: null,
+          capacity: null,
+          image: null,
         };
     return room;
   }, [rooms, id]);
@@ -75,103 +67,97 @@ export default function AddEditRoomForm({ id = null }) {
     defaultValues: room,
   });
 
-  async function updateData(room) {
-    const randomNumber = Math.trunc(Math.random() * 1000000000);
-    const bucketName = "hotel";
-    const filePath = `hotel${randomNumber}`;
-    const pictureURL = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`;
-    // upload picture to the supabase bucket
-    // the file input returns a FileList, to get the file, we need to access the file by index
-    if (room.image.length > 0) {
-      // add a random number to make sure the name isn't duplicate
+  async function updateData(formData) {
+    const updatedRoom = new FormData();
+    // Convert the number, price, discount, and capacity to numbers, because the server expects numbers, but new FormData() converts everything to strings
+    updatedRoom.append("number", +formData.number);
+    updatedRoom.append("price", +formData.price);
+    updatedRoom.append("discount", +formData.discount);
+    updatedRoom.append("capacity", +formData.capacity);
 
-      const { data, error } = await supabase.storage
-        .from(bucketName)
-        .upload(`${filePath}`, room.image[0], {
-          upsert: false, // if we try to upload a file with the same name, it will return an error
-        });
-      if (error) {
-        console.error("Error uploading image:", error.message);
-      } else {
-        console.log("Image uploaded successfully:", data);
-      }
+    // Only append the image if a new file is selected
+    if (formData.image && formData.image.length > 0) {
+      updatedRoom.append("image", formData.image[0]);
     }
 
-    // if there's an id, we're in editting mode, otherwise we're creating a new room row
-    if (id) {
-      const { error } = await supabase
-        .from("rooms")
-        .update({
-          roomNumber: room.roomNumber,
-          guests: room.guests,
-          price: room.price,
-          discount: room.discount,
-          ...(room.image.length > 0 && { image: pictureURL }),
-        })
-        .eq("id", id)
-        .select();
-      if (error) {
-        showToast("error", error.message);
-      } else {
-        showToast("success", "Room successfully updated");
-      }
-    } else {
-      const { error } = await supabase
-        .from("rooms")
-        .insert([
-          {
-            roomNumber: +room.roomNumber,
-            guests: +room.guests,
-            price: +room.price,
-            discount: +room.discount,
-            ...(room.image.length > 0 && { image: pictureURL }),
-          },
-        ])
-        .select();
-      if (error) {
-        showToast("error", error.message);
-      } else showToast("success", "Room successfully added");
-      // error code 23505 - duplicate room number - all room numbers have to be unique
-    }
+    const url = id
+      ? `http://localhost:3000/rooms/${id}`
+      : "http://localhost:3000/rooms";
 
-    // after updating the data in the database, we need to invalidate the cache to refetch the updated data
-    queryClient.invalidateQueries({
-      queryKey: ["rooms"],
-    });
+    try {
+      const response = await fetch(url, {
+        method: id ? "PATCH" : "POST",
+        body: updatedRoom, // Send FormData directly
+        // Remove the Content-Type header, let the browser set it automatically for FormData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      showToast(
+        "success",
+        id ? "Room successfully updated" : "Room successfully added"
+      );
+
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+    } catch (error) {
+      showToast("error", error.message);
+    }
   }
 
   useEffect(() => {
     // if the edit form is open and we delete the room, there would be an error, because room would be undefined => the if clause is necessary
     if (room) {
       reset({
-        roomNumber: room.roomNumber,
+        number: room.number,
         price: room.price,
         discount: room.discount,
-        guests: room.guests,
+        capacity: room.capacity,
         image: "",
       });
     }
   }, [room, reset]);
-  // STILL IN PROGRESS
 
   return (
-    <StyledForm onSubmit={handleSubmit(updateData)}>
+    <StyledForm
+      onSubmit={handleSubmit(updateData)}
+      encType="multipart/form-data"
+    >
       <StyledLegend>{id ? "Edit" : "Add a new room"}</StyledLegend>
       <StyledDiv>
-        <StyledLabel htmlFor="roomNumber">Room Number</StyledLabel>
-        <StyledInput type="text" id="roomNumber" {...register("roomNumber")} />
+        <StyledLabel htmlFor="number">Room Number</StyledLabel>
+        <StyledInput
+          type="number"
+          id="number"
+          {...register("number", { valueAsNumber: true })}
+        />
       </StyledDiv>
       <StyledDiv>
-        <StyledLabel htmlFor="guests">Number of Guests</StyledLabel>
-        <StyledInput type="number" id="guests" {...register("guests")} />
+        <StyledLabel htmlFor="capacity">Capacity</StyledLabel>
+        <StyledInput
+          type="number"
+          id="capacity"
+          {...register("capacity", { valueAsNumber: true })}
+        />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="price">Price</StyledLabel>
-        <StyledInput type="number" id="price" {...register("price")} />
+        <StyledInput
+          type="number"
+          id="price"
+          {...register("price", { valueAsNumber: true })}
+        />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="discount">Discount</StyledLabel>
-        <StyledInput type="number" id="discount" {...register("discount")} />
+        <StyledInput
+          type="number"
+          id="discount"
+          {...register("discount", { valueAsNumber: true })}
+        />
       </StyledDiv>
       <StyledDiv>
         <StyledLabel htmlFor="image">Image</StyledLabel>
@@ -183,5 +169,5 @@ export default function AddEditRoomForm({ id = null }) {
 }
 
 AddEditRoomForm.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
 };

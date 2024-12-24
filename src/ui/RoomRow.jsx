@@ -21,19 +21,18 @@ const StyledImage = styled.img`
 `;
 
 async function deleteRoom(id) {
-  const { error } = await supabase.from("rooms").delete().eq("id", id);
-  if (error) throw new Error("There was an error deleting the room");
+  await fetch(`http://localhost:3000/rooms/${id}`, { method: "DELETE" });
 }
 
 export default function RoomRow({ room, dispatch }) {
   const queryClient = useQueryClient();
   const {
-    id,
+    _id: id,
     price,
-    roomNumber,
+    number: roomNumber,
     discount,
     image,
-    guests: numberOfGuests,
+    capacity: numberOfGuests,
   } = room;
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteRoom,
