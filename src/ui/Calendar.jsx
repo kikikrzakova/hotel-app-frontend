@@ -1,8 +1,9 @@
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
-import { useState } from "react";
+import { format } from 'date-fns';
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const BookRoomContainer = styled.div`
   max-width: 400px;
@@ -101,32 +102,29 @@ const StyledDateRange = styled(DateRange)`
   }
 `;
 
-export default function BookRoom() {
-  const [selectionRange, setSelectionRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
+export default function Calendar({guests =1, setDateSelected, selectionRange, setSelectionRange}) {
+
+
+  
 
   async function handleSelect(ranges) {
     setSelectionRange(ranges.selection);
-    console.log(ranges);
+    setDateSelected(true);
+    console.log("selected range of dates: ",ranges);
     // Format the start and end dates to ISO 8601 format (YYYY-MM-DD) for API call
-    const formattedStartDate = ranges.selection.startDate
-      .toISOString()
-      .split("T")[0];
-    const formattedEndDate = ranges.selection.endDate
-      .toISOString()
-      .split("T")[0];
+    const formattedStartDate = format(ranges.selection.startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(ranges.selection.endDate, 'yyyy-MM-dd');
+    console.log(formattedStartDate, formattedEndDate);
     // Make API call to fetch booked rooms within the selected date range and number of guests
     const response = await fetch(
-      `http://localhost:3000/booking/?startDate=${formattedStartDate}&endDate=${formattedEndDate}&guests=3`
+      `http://localhost:3000/booking/?startDate=${formattedStartDate}&endDate=${formattedEndDate}&guests=${guests}`
     );
     const {
-      data: { bookedRoomNumbers },
+      data,
     } = await response.json();
 
-    console.log(bookedRoomNumbers);
+    console.log("Available single rooms:", data);
+    
   }
 
   return (
@@ -141,4 +139,11 @@ export default function BookRoom() {
       />
     </BookRoomContainer>
   );
+}
+
+Calendar.propTypes = {
+  guests: PropTypes.number,
+  setDateSelected: PropTypes.func,
+  selectionRange: PropTypes.object,
+  setSelectionRange: PropTypes.func,
 }
