@@ -46,7 +46,7 @@ export default function Sidebar() {
         </StyledNavLink>
         <StyledNavLink to="/booking-form/page1">
           <FaCalendarAlt />
-          <span>Book a Room</span>
+          <span>Reservation</span>
         </StyledNavLink>
 
         <StyledNavLink to="/bookings">

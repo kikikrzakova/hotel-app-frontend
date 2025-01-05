@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import supabase from "../supabse";
 import { useQuery } from "@tanstack/react-query";
 import RoomRow, { StyledRow } from "./RoomRow";
 import AddRoom from "./AddRoom";

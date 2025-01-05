@@ -116,3 +116,5 @@ RoomRow.propTypes = {
   room: PropTypes.object,
   dispatch: PropTypes.func,
 };
+
+export {StyledImage}
