@@ -110,11 +110,11 @@ export default function Calendar({guests =1, setDateSelected, selectionRange, se
   async function handleSelect(ranges) {
     setSelectionRange(ranges.selection);
     setDateSelected(true);
-    console.log("selected range of dates: ",ranges);
+
     // Format the start and end dates to ISO 8601 format (YYYY-MM-DD) for API call
     const formattedStartDate = format(ranges.selection.startDate, 'yyyy-MM-dd');
     const formattedEndDate = format(ranges.selection.endDate, 'yyyy-MM-dd');
-    console.log(formattedStartDate, formattedEndDate);
+
     // Make API call to fetch booked rooms within the selected date range and number of guests
     const response = await fetch(
       `http://localhost:3000/booking/?startDate=${formattedStartDate}&endDate=${formattedEndDate}&guests=${guests}`

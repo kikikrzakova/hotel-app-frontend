@@ -44,7 +44,7 @@ export default function Sidebar() {
           <IoHome />
           <span>Home</span>
         </StyledNavLink>
-        <StyledNavLink to="/booking">
+        <StyledNavLink to="/booking-form/page1">
           <FaCalendarAlt />
           <span>Book a Room</span>
         </StyledNavLink>
