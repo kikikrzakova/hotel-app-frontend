@@ -20,7 +20,7 @@ export default function BookingForm1() {
     <div>
       <form onSubmit={(e)=>{
           e.preventDefault();
-          navigate(`/booking-form/page2?guests=${guests}&start=${selectionRange.startDate}&end-date=${selectionRange.endDate}`)}}>
+          navigate(`/booking-form/page2?guests=${guests}&start-date=${selectionRange.startDate}&end-date=${selectionRange.endDate}`)}}>
         <label htmlFor="guests">Number of guests</label>
         <input type="number" id="guests" name="guests" value={guests} min="1" onChange={(e)=>setGuests(e.target.value)}/>
       <Calendar guests={guests} setDateSelected={setDateSelected} selectionRange={selectionRange} setSelectionRange={setSelectionRange}/>

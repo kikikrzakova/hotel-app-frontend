@@ -1,7 +1,6 @@
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
-import { format } from 'date-fns';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -102,7 +101,7 @@ const StyledDateRange = styled(DateRange)`
   }
 `;
 
-export default function Calendar({guests =1, setDateSelected, selectionRange, setSelectionRange}) {
+export default function Calendar({ setDateSelected, selectionRange, setSelectionRange}) {
 
 
   
@@ -111,19 +110,7 @@ export default function Calendar({guests =1, setDateSelected, selectionRange, se
     setSelectionRange(ranges.selection);
     setDateSelected(true);
 
-    // Format the start and end dates to ISO 8601 format (YYYY-MM-DD) for API call
-    const formattedStartDate = format(ranges.selection.startDate, 'yyyy-MM-dd');
-    const formattedEndDate = format(ranges.selection.endDate, 'yyyy-MM-dd');
-
-    // Make API call to fetch booked rooms within the selected date range and number of guests
-    const response = await fetch(
-      `http://localhost:3000/booking/?startDate=${formattedStartDate}&endDate=${formattedEndDate}&guests=${guests}`
-    );
-    const {
-      data,
-    } = await response.json();
-
-    console.log("Available single rooms:", data);
+    
     
   }
 
@@ -142,7 +129,6 @@ export default function Calendar({guests =1, setDateSelected, selectionRange, se
 }
 
 Calendar.propTypes = {
-  guests: PropTypes.number,
   setDateSelected: PropTypes.func,
   selectionRange: PropTypes.object,
   setSelectionRange: PropTypes.func,
