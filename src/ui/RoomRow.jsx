@@ -6,7 +6,6 @@ import { IconContext } from "react-icons";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import Button from "./Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import supabase from "../supabse";
 import showToast from "../toast";
 import stylePrice from "../stylePrice";
 

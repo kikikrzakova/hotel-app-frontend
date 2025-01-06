@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { StyledDiv, StyledTable } from "./Rooms";
-import { StyledImage, StyledRow } from "./RoomRow";
+import { StyledTable } from "./Rooms";
 import Button from "./Button";
 import styled from "styled-components";
+import PickedRoomRow from "./PickedRoomRow";
 
 const StyledContainer = styled.div`
   padding: 20px;
@@ -50,9 +50,11 @@ export default function BookingForm2() {
       setTotalPrice(data.reduce((total, room) => total + room.price, 0) * totalNights);
     }
     fetchAvailableRooms(guests, formattedStartDate, formattedEndDate);
-  }, [guests, formattedStartDate, formattedEndDate]);
+  }, [guests, formattedStartDate, formattedEndDate, totalNights]);
 
+  
   return (
+    <>
     <StyledContainer>
       <StyledTable>
         <thead>
@@ -61,25 +63,41 @@ export default function BookingForm2() {
             <StyledHeader>Room Number</StyledHeader>
             <StyledHeader>Capacity</StyledHeader>
             <StyledHeader>Price per night</StyledHeader>
+            <StyledHeader></StyledHeader>
           </tr>
         </thead>
         <tbody>
-          {availableRooms.map(room => (
-            <StyledRow key={room.number}>
-              <td><StyledImage src={room.image} alt="room" /></td>
-              <td>{room.number}</td>
-              <td>{room.capacity}</td>
-              <td>{room.price}</td>
-            </StyledRow>
-          ))}
+          {availableRooms.map(room => 
+            <PickedRoomRow key={room._id} room={room}/>)
+          }
         </tbody>
         <tfoot>
           <tr>
-            <StyledFooter colSpan="4">Total Price for {totalNights} {totalNights === 1 ? "Night" : "Nights"}: {totalPrice}</StyledFooter>
+            <StyledFooter colSpan="5">Total Price for {totalNights} {totalNights === 1 ? "Night" : "Nights"}: {totalPrice}</StyledFooter>
           </tr>
         </tfoot>
       </StyledTable>
       <Button onClick={() => navigate(-1)}>Back</Button>
+      <Button>Next</Button>
     </StyledContainer>
+    {/* a table of other available rooms, that haven't been picked */}
+    <table>
+        <tr>
+          <th>Room Number</th>
+          <th>Capacity</th>
+          <th>Price per Night</th>
+        </tr>
+        {availableRooms.map(room => (
+          <tr key={room.number}>
+            <td>{room.number}</td>
+            <td>{room.capacity}</td>
+            <td>{room.price}</td>
+          </tr>
+        ))}
+    </table>
+    
+    </>
+    
+
   );
 }
