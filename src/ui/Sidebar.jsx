@@ -8,7 +8,6 @@ import { IconContext } from "react-icons";
 import { FaTableList } from "react-icons/fa6";
 
 const Aside = styled.aside`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -5,9 +5,11 @@ import { IconContext } from "react-icons";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import PropTypes from "prop-types";
 
-export default function PickedRoomRow({room}){
+
+export default function PickedRoomRow({room, modifyPickedRoom, mode}){
     const styledPrice = stylePrice(room.price);
     const styledDiscountedPrice = stylePrice(room.price - room.discount);
+
     return (
     <StyledRow key={room.number}>
             <td><StyledImage src={room.image} alt="room" /></td>
@@ -36,7 +38,10 @@ export default function PickedRoomRow({room}){
                     )}
                     </div>
                 </td>
-            <td><Button>Remove</Button></td>
+            <td><Button onClick={()=>{
+                if (mode==="remove") {
+                    modifyPickedRoom(room._id)
+                } else {modifyPickedRoom(room)}}}>{mode.toUpperCase()}</Button></td>
         </StyledRow>
     )
                     
@@ -44,4 +49,6 @@ export default function PickedRoomRow({room}){
 
 PickedRoomRow.propTypes = {
     room: PropTypes.object,
+    modifyPickedRoom: PropTypes.func,
+    mode: PropTypes.string,
 }

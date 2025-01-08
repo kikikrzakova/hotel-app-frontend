@@ -1,8 +1,13 @@
-// import supabase from "../supabse";
+import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-
 import BookingsTable from "./BookingsTable";
 
+
+
+const StyledLoading = styled.p`
+  color: #954608;
+  font-weight: bold;
+`;
 async function fetchData() {
   const rawData = await fetch("http://localhost:3000/bookings", {
     method: "GET",
@@ -13,6 +18,7 @@ async function fetchData() {
 
   return bookings;
 }
+
 export default function Bookings() {
   const {
     data: bookings,
@@ -23,9 +29,14 @@ export default function Bookings() {
     queryFn: fetchData,
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <StyledLoading>Loading...</StyledLoading>;
   //TODO add a loading spinner instead of "Loading..."
   if (error) return <div>{error.message}</div>;
 
-  return <BookingsTable bookings={bookings} />;
+  return (
+
+      <BookingsTable bookings={bookings} />
+
+  );
 }
+

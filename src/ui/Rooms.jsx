@@ -7,18 +7,36 @@ import { useReducer, useState } from "react";
 import RoomFilter from "./RoomFilter";
 
 export const StyledTable = styled.table`
-  width: 800px;
+  width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #f5ebe2;
+  overflow: hidden;
 `;
 export const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 1100px;
 `;
 
+export const StyledTh = styled.th`
+  padding: 10px;
+  font-weight: bold;
+  color: #954608;
+  background-color: #f5ebe2;
+  text-align: left;
+  font-weight: bold;
+`;
+
+
+export const StyledTfoot = styled.tfoot`
+  background-color: #f1f1f1;
+`;
 // fetch data about rooms from supabase
 
-async function fetchData() {
+export async function fetchData() {
   const response = await fetch("http://localhost:3000/rooms");
   const {
     data: { rooms },
@@ -106,7 +124,7 @@ export default function Rooms() {
   // create a row in the table for each room
   const tableRows = sortedRooms.map((room) => (
     <RoomRow room={room} dispatch={dispatch} key={room._id} />
-  ));
+  ))
 
   return (
     <StyledDiv>
@@ -119,21 +137,21 @@ export default function Rooms() {
       <StyledTable>
         <thead>
           <StyledRow>
-            <th>Image</th>
-            <th>No.</th>
-            <th>Guests</th>
-            <th>Price</th>
-            <th>Discount</th>
-            <th></th>
+            <StyledTh>Image</StyledTh>
+            <StyledTh>No.</StyledTh>
+            <StyledTh>Guests</StyledTh>
+            <StyledTh>Price</StyledTh>
+            <StyledTh>Discount</StyledTh>
+            <StyledTh></StyledTh>
           </StyledRow>
         </thead>
         <tbody>{tableRows}</tbody>
-        <tfoot>
+        <StyledTfoot>
           <AddRoom
             fn={() => dispatch({ type: "add" })}
             showForm={roomForm.addRoom}
           />
-        </tfoot>
+        </StyledTfoot>
       </StyledTable>
 
       {(roomForm.addRoom || roomForm.editRoom) && (

@@ -108,10 +108,10 @@ export default function Calendar({ setDateSelected, selectionRange, setSelection
 
   async function handleSelect(ranges) {
     setSelectionRange(ranges.selection);
-    setDateSelected(true);
+    if (ranges.selection.startDate !== ranges.selection.endDate){
 
-    
-    
+      setDateSelected(true);
+    } else {setDateSelected(false);}
   }
 
   return (
