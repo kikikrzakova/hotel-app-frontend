@@ -7,7 +7,6 @@ const StyledLayout = styled.div`
   display: grid;
   grid-template-columns: 180px 1fr;
   grid-template-rows: auto;
-  height: 100vh;
 `;
 export default function Layout() {
   return (

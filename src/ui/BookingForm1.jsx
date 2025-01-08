@@ -3,7 +3,7 @@ import Calendar from "./Calendar.jsx";
 import Button from "./Button.jsx";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { addDays } from "date-fns";
+
 
 const StyledForm = styled.form`
   padding: 20px;
@@ -17,6 +17,7 @@ const StyledForm = styled.form`
 `;
 
 const StyledLabel = styled.label`
+  font-size: 1.2rem;
   font-weight: bold;
   color: #954608;
   margin-bottom: 10px;
@@ -26,7 +27,7 @@ const StyledInput = styled.input`
   border: 1px solid #954608;
   border-radius: 30px;
   height: 2em;
-  padding: 1px 15px;
+  padding: 0.5px 15px;
   color: #954608;
   margin-bottom: 20px;
   &:focus {
@@ -52,7 +53,7 @@ export default function BookingForm1() {
         );
       }}
     >
-      <StyledLabel htmlFor="guests">Number of guests</StyledLabel>
+      <StyledLabel htmlFor="guests">Number of Guests</StyledLabel>
       <StyledInput
         type="number"
         id="guests"

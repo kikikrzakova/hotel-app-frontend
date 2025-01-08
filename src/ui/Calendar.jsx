@@ -6,8 +6,9 @@ import PropTypes from "prop-types";
 
 const BookRoomContainer = styled.div`
   max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 1rem auto;
+  padding: 0.2rem 2rem;
+  padding-bottom: 1rem;
   background-color: #f5ebe2;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -17,7 +18,7 @@ const BookRoomContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   color: #954608;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -116,7 +117,7 @@ export default function Calendar({ setDateSelected, selectionRange, setSelection
 
   return (
     <BookRoomContainer>
-      <Title>Book a Room</Title>
+      <Title>Pick Dates</Title>
       <StyledDateRange
         ranges={[selectionRange]}
         onChange={handleSelect}
