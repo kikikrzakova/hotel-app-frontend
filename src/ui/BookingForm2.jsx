@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyledTable } from "./Rooms";
 import Button from "./Button";
 import styled from "styled-components";
@@ -51,6 +51,7 @@ export default function BookingForm2() {
   const [searchParams] = useSearchParams();
   const [availableRooms, setAvailableRooms] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  let roomNumberQuery = useRef("");
   const guests = searchParams.get('guests');
   const startDate = searchParams.get('start-date');
   const endDate = searchParams.get('end-date');
@@ -62,7 +63,7 @@ export default function BookingForm2() {
     queryFn: fetchData
   })
 
-const [unpickedRooms, setUnpickedRooms] = useState([]);
+  const [unpickedRooms, setUnpickedRooms] = useState([]);
 // console.log(availableRooms, unpickedRooms);
 
   useEffect(() => {
@@ -71,11 +72,13 @@ const [unpickedRooms, setUnpickedRooms] = useState([]);
         `http://localhost:3000/booking/?startDate=${formattedStartDate}&endDate=${formattedEndDate}&guests=${guests}`
       );
       const { data } = await response.json();
-
       setAvailableRooms(data);
+
+
       setTotalPrice(data.reduce((total, room) => total + room.price - room.discount, 0) * totalNights);
     }
     fetchAvailableRooms(guests, formattedStartDate, formattedEndDate);
+
   }, [guests, formattedStartDate, formattedEndDate, totalNights]);
 
   useEffect(
@@ -85,6 +88,14 @@ const [unpickedRooms, setUnpickedRooms] = useState([]);
         if (!availableNumbers.includes(room.number)) {
           return room
       }});
+      // we want the query string to look like this ?no=201&no=203
+      availableRooms.forEach((availableRoom, index) => {
+        if (index === 0) {
+          roomNumberQuery.current = `no=${availableRoom.number}`
+        } else {
+          roomNumberQuery.current += `&no=${availableRoom.number}`
+        }
+      })
       setUnpickedRooms(unpickedRooms);
       setTotalPrice(availableRooms.reduce((total, room) => total + room.price - room.discount, 0) * totalNights);  // recalculate total price for the remaining rooms
     } 
@@ -136,7 +147,7 @@ const [unpickedRooms, setUnpickedRooms] = useState([]);
         }
         <ButtonContainer>
           <Button onClick={() => navigate(-1)}>Back</Button>
-          <Button>Next</Button>
+          <Button onClick={()=> navigate(`/booking-form/page3?${roomNumberQuery.current}&guests=${guests}&start-date=${startDate}&end-date=${endDate}&total-nights=${totalNights}`)}>Next</Button>
         </ButtonContainer>
 
       </StyledContainer>

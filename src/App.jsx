@@ -12,11 +12,12 @@ import Settings from "./ui/Settings";
 import Rooms from "./ui/Rooms";
 import NotFound from "./ui/NotFound";
 import { ToastContainer } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
 import BookingForm1 from "./ui/BookingForm1";
 import BookingLayout from "./ui/BookingLayout";
 import BookingForm2 from "./ui/BookingForm2";
+import BookingForm3 from "./ui/BookingForm3";
+import SuccessfulBooking from "./ui/SuccessfulBooking";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,8 @@ function App() {
               <Route path="booking-form" element={<BookingLayout />} >
                 <Route path="page1" element={<BookingForm1 />} />
                 <Route path="page2" element={<BookingForm2 />} />
-
+                <Route path="page3" element={<BookingForm3 />} />
+                <Route path="successful-booking" element={<SuccessfulBooking />} />
               </Route>
               <Route path="bookings" element={<Bookings />} />
               <Route path="rooms" element={<Rooms />} />
