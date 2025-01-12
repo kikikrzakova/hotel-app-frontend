@@ -52,6 +52,8 @@ export default function BookingForm2() {
   const [availableRooms, setAvailableRooms] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   let roomNumberQuery = useRef("");
+  let queryStringsWithoutRooms = useRef(searchParams);
+  console.log(queryStringsWithoutRooms);
   const guests = searchParams.get('guests');
   const startDate = searchParams.get('start-date');
   const endDate = searchParams.get('end-date');
@@ -99,7 +101,8 @@ export default function BookingForm2() {
       setUnpickedRooms(unpickedRooms);
       setTotalPrice(availableRooms.reduce((total, room) => total + room.price - room.discount, 0) * totalNights);  // recalculate total price for the remaining rooms
     } 
-   , [availableRooms, totalNights, allRooms]);
+   , [availableRooms, totalNights, allRooms
+   ]);
 
   function removePickedRoom(id){
     // remove the picked room from the state
