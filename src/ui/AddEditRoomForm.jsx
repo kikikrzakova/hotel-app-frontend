@@ -87,8 +87,8 @@ export default function AddEditRoomForm({ id = null }) {
     try {
       const response = await fetch(url, {
         method: id ? "PATCH" : "POST",
-        body: updatedRoom, // Send FormData directly
-        // Remove the Content-Type header, let the browser set it automatically for FormData
+        // we don't add headers, because we want to send FormData directly, not JSON
+        body: updatedRoom, // Send FormData object directly, if we use json.stingify(updatedRoom), the server will not get the file
       });
 
       if (!response.ok) {
