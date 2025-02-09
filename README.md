@@ -1,4 +1,4 @@
-⚠️ Important Notes: This database is read-only – you cannot modify, delete, or add new data. It is intended only for DEMO purposes.
+⚠️ Important Notes: The database is read-only – you cannot modify, delete, or add new data. It is intended only for DEMO purposes.
 
 # Frontend - Hotel Manager App
 
