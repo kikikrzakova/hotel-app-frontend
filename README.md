@@ -1,3 +1,5 @@
+⚠️ Important Notes: This database is read-only – you cannot modify, delete, or add new data. It is intended only for DEMO purposes.
+
 # Frontend - Hotel Manager App
 
 This is the frontend for the Hotel Manager web app.
