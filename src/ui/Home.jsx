@@ -9,10 +9,10 @@ const StyledContainer = styled.div`
 `
 export default function Home() {
   return (
-    <StyledContainer>
+    <StyledContainer> 
   <h2>Lorem ipsum</h2>
   <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Morbi bibendum mollis parturient ligula himenaeos lacus dis ullamcorper. Semper class in varius sit pellentesque amet. Hendrerit amet imperdiet molestie ultrices quis curae dui mauris. Potenti pellentesque sem vehicula pharetra proin est venenatis cras faucibus. Montes morbi auctor; at ante velit velit vestibulum. Velit feugiat maximus turpis bibendum torquent ante viverra rutrum. Aliquet elit velit dui neque per diam nisl.
-
+    </p>
   <p>
   Ultrices ridiculus scelerisque orci pretium tincidunt aenean. Donec egestas torquent leo taciti vel tempor maximus. Varius libero rhoncus fringilla maximus blandit accumsan conubia nulla. Phasellus eu tortor vivamus vulputate litora proin nam cras. Condimentum mi turpis eleifend at placerat. Mattis pellentesque vel nisi ante facilisis morbi vel. Gravida diam odio fames orci iaculis arcu. In nostra nisl accumsan libero phasellus. Magnis lacinia ad justo viverra blandit sapien.
   </p>
@@ -25,7 +25,7 @@ export default function Home() {
   </p>
   
   <p>
-  Torquent felis conubia praesent enim nam sapien porttitor sapien ridiculus. Vitae rutrum vestibulum cursus luctus metus enim iaculis pretium. Turpis cras imperdiet tempor mattis per ullamcorper litora. Odio quisque magna ornare netus enim auctor. Fringilla cursus posuere faucibus tortor massa platea conubia nibh venenatis. Convallis commodo mus nascetur nisl sagittis sociosqu dui ridiculus. Scelerisque imperdiet rutrum massa sociosqu velit eu nulla nam cras. Luctus quis at vivamus egestas fermentum tortor nulla.</p>
+  Torquent felis conubia praesent enim nam sapien porttitor sapien ridiculus. Vitae rutrum vestibulum cursus luctus metus enim iaculis pretium. Turpis cras imperdiet tempor mattis per ullamcorper litora. Odio quisque magna ornare netus enim auctor. Fringilla cursus posuere faucibus tortor massa platea conubia nibh venenatis. Convallis commodo mus nascetur nisl sagittis sociosqu dui ridiculus. Scelerisque imperdiet rutrum massa sociosqu velit eu nulla nam cras. Luctus quis at vivamus egestas fermentum tortor nulla.
   </p>
     </StyledContainer>
 )

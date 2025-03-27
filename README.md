@@ -1,8 +1,13 @@
-# React + Vite
+⚠️ Important Notes: The database is read-only – you cannot modify, delete, or add new data. It is intended only for DEMO purposes.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Frontend - Hotel Manager App
 
-Currently, two official plugins are available:
+This is the frontend for the Hotel Manager web app.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Backend
+The backend can be found [here](https://github.com/kikikrzakova/hotel-backend).
+
+To run the project locally, follow the instructions below:
+1. Clone the repository
+2. Install dependencies for both frontend and backend
+3. Run the server and the frontend app

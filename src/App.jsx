@@ -18,19 +18,28 @@ import BookingLayout from "./ui/BookingLayout";
 import BookingForm2 from "./ui/BookingForm2";
 import BookingForm3 from "./ui/BookingForm3";
 import SuccessfulBooking from "./ui/SuccessfulBooking";
+import { useState, createContext } from "react";
+import ProtectedContent from "./ui/ProtectedContent";
+
 
 const queryClient = new QueryClient();
 
+const AuthenticationContext = createContext();
+
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
     <>
+    <AuthenticationContext.Provider value={setIsAuthenticated}>
+
       <ToastContainer />
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen />
 
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<ProtectedContent isAuthenticated={isAuthenticated}><Layout /></ProtectedContent>}>
               <Route path="home" element={<Home />} />
               <Route path="booking-form" element={<BookingLayout />} >
                 <Route path="page1" element={<BookingForm1 />} />
@@ -42,14 +51,16 @@ function App() {
               <Route path="rooms" element={<Rooms />} />
               <Route path="settings" element={<Settings />} />
             </Route>
-            <Route path="/login" elemen={<Login />} />
+            <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated}/>} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
+    </AuthenticationContext.Provider>
     </>
   );
 }
 
 export default App;
+export {AuthenticationContext};

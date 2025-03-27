@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthenticationContext } from "../App";
 
 const StyledHeader = styled.header`
   grid-column: 1 / span 2;
@@ -39,7 +40,8 @@ const Logo = styled.h1`
   margin: 0;
 `;
 
-const SignOutLink = styled(Link)`
+const SignOutLink = styled.button`
+  background-color: transparent;
   color: #f5ebe2;
   text-decoration: none;
   font-size: 1.1rem;
@@ -57,14 +59,19 @@ const SignOutLink = styled(Link)`
   &:hover {
     background-color: #f5ebe2;
     color: #954608;
+    cursor: pointer;
   }
 `;
 
 export default function Header() {
+  const setIsAuthenticated = useContext(AuthenticationContext);
+
   return (
     <StyledHeader>
       <Logo>Luxe Hotel</Logo>
-      <SignOutLink to="/signout">Sign Out</SignOutLink>
+      <SignOutLink type="click" onClick={()=>{
+        setIsAuthenticated(false);
+      }}>Sign Out</SignOutLink>
     </StyledHeader>
   );
 }

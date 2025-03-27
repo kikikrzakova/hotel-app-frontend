@@ -162,10 +162,9 @@ export default function BookingForm2() {
               <tr>
                 <StyledTableTitle colSpan="5">Other Available Rooms</StyledTableTitle>
               </tr>
-              <StyledHeader></StyledHeader>
-              <StyledHeader>Room Number</StyledHeader>
-              <StyledHeader>Capacity</StyledHeader>
-              <StyledHeader>Price per Night</StyledHeader>
+              <tr><StyledHeader></StyledHeader>
+              <StyledHeader>Room Number</StyledHeader><StyledHeader>Capacity</StyledHeader>
+              <StyledHeader>Price per Night</StyledHeader></tr>
             </thead>
             <tbody>
 

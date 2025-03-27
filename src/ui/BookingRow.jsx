@@ -16,7 +16,7 @@ const StyledRow = styled.tr`
   text-align: center;
 `;
 
-export default function BookingRow({ booking, dispatch }) {
+export default function BookingRow({ booking }) {
   const queryClient = useQueryClient();
   const {
     _id: id,
@@ -136,16 +136,11 @@ export default function BookingRow({ booking, dispatch }) {
         )}
       </td>
 
-      <td>
-        <Button onClick={() => dispatch({ type: "edit", payload: id })}>
-          Edit
-        </Button>
-      </td>
+
     </StyledRow>
   );
 }
 
 BookingRow.propTypes = {
   booking: PropTypes.object,
-  dispatch: PropTypes.func,
 };
